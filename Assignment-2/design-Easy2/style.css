@@ -1,0 +1,250 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #000;
+  color: white;
+  font-family: "Inter", sans-serif;
+}
+
+.page-wrapper {
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+  padding: 5px 40px 50px;
+  background: #000;
+}
+.navbar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-icon {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+}
+
+.logo-section h2 {
+  font-size: 25px;
+  font-weight: 700;
+  letter-spacing: -1px;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 64px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.start-btn {
+  width: 165px;
+  height: 68px;
+  border: none;
+  border-radius: 18px;
+  background: #111111;
+  color: white;
+  font-size: 20px;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.03),
+    0 10px 40px rgba(255, 255, 255, 0.03);
+}
+.hero-section {
+  width: 100%;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hero-section h1 {
+  font-size: 150px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -8px;
+  text-align: center;
+}
+
+.category-wrapper {
+  margin-top: 42px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.category-btn {
+  border: none;
+  background: #111111;
+  color: white;
+  height: 58px;
+  padding: 0 30px;
+  border-radius: 40px;
+  font-size: 18px;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.03),
+    0 10px 40px rgba(255, 255, 255, 0.03);
+}
+
+.category-btn.active {
+  background: linear-gradient(180deg, #ff7a1a 0%, #ff4d00 100%);
+}
+.blogs-section {
+  width: 100%;
+  margin-top: 72px;
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+}
+
+.blog-card {
+  width: 430px;
+  height: 540px;
+  background: linear-gradient(180deg, #0a0a0a 0%, #060606 100%);
+  border-radius: 30px;
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    inset 0 0 0 3px rgba(255, 255, 255, 0.03),
+    0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+.image-wrapper {
+  width: 100%;
+  height: 312px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 30px;
+}
+
+.image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.card-content {
+  padding: 24px 28px;
+  position: relative;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 78px;
+  height: 42px;
+  padding: 0 18px;
+  background: rgba(255, 98, 0, 0.2);
+  color: #ff9b5f;
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.card-content h3 {
+  margin-top: 24px;
+  font-size: 28px;
+  line-height: 1.1;
+  font-weight: 500;
+  letter-spacing: -1px;
+}
+
+.card-content p {
+  margin-top: 34px;
+  font-size: 16px;
+  color: #8c8c8c;
+  font-weight: 400;
+}
+@media (max-width: 1400px) {
+  .hero-section h1 {
+    font-size: 120px;
+  }
+
+  .blogs-section {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 992px) {
+  .navbar {
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .nav-links {
+    position: static;
+    transform: unset;
+    gap: 30px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .hero-section h1 {
+    font-size: 82px;
+    letter-spacing: -4px;
+  }
+
+  .blogs-section {
+    align-items: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .page-wrapper {
+    padding: 24px 20px 50px;
+  }
+
+  .hero-section {
+    margin-top: 60px;
+  }
+
+  .hero-section h1 {
+    font-size: 58px;
+    line-height: 1.1;
+  }
+
+  .category-wrapper {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .blog-card {
+    width: 100%;
+    height: auto;
+  }
+
+  .image-wrapper {
+    height: 260px;
+  }
+
+  .card-content h3 {
+    font-size: 24px;
+  }
+}
