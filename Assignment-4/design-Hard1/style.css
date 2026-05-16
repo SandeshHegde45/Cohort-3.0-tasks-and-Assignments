@@ -1,0 +1,358 @@
+@font-face {
+  font-family: "Jhordy";
+  src: url(./assets/Jhordy.otf) format("opentype");
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body,
+html {
+  height: 100%;
+  width: 100%;
+  font-family: "Poppins", sans-serif;
+  padding: 0.4rem 2rem;
+  user-select: none;
+}
+.root {
+  max-width: 1500px;
+  margin: auto;
+}
+header {
+  width: 100%;
+  padding: 1.5rem 0.5rem;
+  border-bottom: 3px solid rgb(210, 210, 210);
+}
+nav {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.logo {
+  font-size: medium;
+  cursor: pointer;
+}
+.nav-links {
+  display: flex;
+  gap: 3rem;
+}
+.nav-links a {
+  text-decoration: none;
+  color: rgb(28, 28, 28);
+  font-weight: 600;
+  font-size: larger;
+  position: relative;
+}
+.nav-links a::before {
+  content: "";
+  bottom: 0;
+  position: absolute;
+  height: 3px;
+  width: 0%;
+  background: linear-gradient(to right, rgb(255, 123, 0), rgb(255, 0, 0));
+  border-radius: 20px;
+  transition: all 0.3s ease-in-out;
+}
+.nav-links a:hover::before {
+  width: 100%;
+}
+.nav-right {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  align-items: center;
+}
+.nav-right i {
+  font-size: 30px;
+  cursor: pointer;
+}
+.nav-right img {
+  height: 30px;
+  cursor: pointer;
+}
+.nav-right button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  border-radius: 50%;
+  padding: 0.9rem;
+  background-color: black;
+  cursor: pointer;
+}
+.nav-right button img {
+  height: 20px;
+}
+.main-heading {
+  width: 100%;
+  text-align: center;
+  padding: 5rem;
+  padding-bottom: 0;
+  position: relative;
+}
+.main-heading h1 {
+  width: 100%;
+  font-size: 5rem;
+  line-height: 1.1;
+  font-weight: 700;
+}
+.sunflower {
+  position: absolute;
+  height: 80px;
+  top: 30%;
+  left: 0;
+}
+.hibiscus {
+  position: absolute;
+  height: 80px;
+  top: 30%;
+  right: 0;
+}
+.hero-p {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  font-weight: 700;
+}
+.hero-left {
+  position: relative;
+}
+.hero-left h1 {
+  width: 190px;
+  font-weight: 600;
+  font-size: x-large;
+  margin-top: 1rem;
+}
+.blossom {
+  position: absolute;
+  top: -20%;
+  left: 20%;
+  height: 70px;
+}
+.explore-more-collection {
+  height: 130px;
+  position: absolute;
+  top: -10%;
+  right: 5%;
+}
+.photos-container {
+  height: 750px;
+  width: 100%;
+  display: grid;
+  margin-top: -50px;
+  grid-template-columns: repeat(2, 1fr) 1.2fr repeat(2, 1fr);
+  grid-template-rows: 30px repeat(5, 12%) 30px;
+  gap: 16px;
+  position: relative;
+}
+
+.left {
+  grid-column: 1;
+  grid-row: 3/6;
+  border-radius: 30px;
+  overflow: hidden;
+}
+.left img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  transition: all 0.4s ease-in-out;
+}
+.left img:hover {
+  transform: scale(1.09);
+}
+
+.center-left-top {
+  grid-column: 2;
+  grid-row: 2/4;
+  border-radius: 30px;
+  overflow: hidden;
+}
+.center-left-top img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  transition: all 0.4s ease-in-out;
+}
+.center-left-top img:hover {
+  transform: scale(1.09);
+}
+
+.center-left-bottom {
+  grid-column: 2;
+  grid-row: 4/7;
+  border-radius: 30px;
+  overflow: hidden;
+}
+.center-left-bottom img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  transition: all 0.4s ease-in-out;
+}
+.center-left-bottom img:hover {
+  transform: scale(1.09);
+}
+
+.center {
+  grid-column: 3;
+  grid-row: 1/8;
+  border-radius: 30px;
+  overflow: hidden;
+}
+.mid-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  transition: all 0.4s ease-in-out;
+}
+.mid-image:hover {
+  transform: scale(1.09);
+}
+.center-black_star {
+  grid-column: 3;
+  grid-row: 1/2;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.black_star {
+  height: 150px;
+}
+.center-right-top {
+  grid-column: 4;
+  grid-row: 2/5;
+  border-radius: 30px;
+  overflow: hidden;
+}
+.center-right-top img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  transition: all 0.4s ease-in-out;
+}
+.center-right-top img:hover {
+  transform: scale(1.09);
+}
+
+.center-right-bottom {
+  grid-column: 4;
+  grid-row: 5/7;
+  border-radius: 30px;
+  overflow: hidden;
+}
+.center-right-bottom img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  transition: all 0.4s ease-in-out;
+}
+.center-right-bottom img:hover {
+  transform: scale(1.09);
+}
+
+.right {
+  grid-column: 5;
+  grid-row: 3/6;
+  border-radius: 30px;
+  overflow: hidden;
+}
+
+.right img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  transition: all 0.4s ease-in-out;
+}
+.right img:hover {
+  transform: scale(1.09);
+}
+.right-bottom {
+  grid-column: 5;
+  grid-row: 6/7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.right-bottom h2 {
+  margin-top: -25%;
+  font-weight: 600;
+}
+footer {
+  height: 15rem;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: -11%;
+  margin-bottom: 2rem;
+}
+.footer-left {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 1.5rem;
+  line-height: 2;
+}
+.footer-left img {
+  height: 2rem;
+  margin-top: -25px;
+}
+.footer-left p {
+  font-size: large;
+  font-weight: 600;
+}
+.footer-left h1 {
+  font-family: Jhordy;
+  text-decoration: underline;
+  text-decoration-color: rgb(255, 201, 74);
+  text-decoration-thickness: 0.5rem;
+  text-underline-offset: 10px;
+  font-size: 50px;
+  font-weight: 300;
+}
+.footer-center button {
+  padding: 20px 40px;
+  border: 1px solid #ebe9e9;
+  border-radius: 20px;
+  font-weight: 600;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  margin-bottom: 20%;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.07);
+}
+.footer-right {
+  margin-bottom: 3%;
+}
+.blog-info {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.1;
+}
+.blog-info h1 {
+  font-size: 90px;
+  font-weight: 200;
+}
+.blog-info button {
+  padding: 20px;
+  border-radius: 50%;
+  background-color: black;
+}
+.blog-info button i {
+  color: white;
+}
