@@ -1,0 +1,46 @@
+#card .bottom {
+  height: 40%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(transparent, black);
+  bottom: -40%;
+  position: absolute;
+  transition: all cubic-bezier(0.19, 1, 0.22, 1) 1s;
+  padding: 25px;
+  color: white;
+}
+#card:hover .bottom {
+  bottom: 0;
+}
+.bottom i {
+  padding: 15px 15px;
+  color: black;
+  background-color: white;
+  border-radius: 50%;
+}
+#slider {
+  white-space: nowrap;
+  overflow-x: hidden;
+}
+
+@keyframes scrol {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+#container {
+  display: inline-block;
+  animation-name: scrol;
+  animation-duration: 20s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+#container img {
+  display: inline;
+  height: 50%;
+}
