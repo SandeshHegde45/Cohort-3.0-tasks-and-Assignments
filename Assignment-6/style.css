@@ -1,20 +1,25 @@
 @import url("https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&family=Inter:wght@300;400;500;600;700;800&family=Roboto+Mono:wght@400;500&display=swap");
 
-@font-face {
-  font-family: "RecklessCondensed";
-  src: url("https://cdn.shopify.com/s/files/1/0297/8132/7932/files/RecklessCondensedS-TRIAL-Book.woff?v=1768655865")
-    format("woff");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
+
+/* Width of scrollbar */
+::-webkit-scrollbar {
+  width: 2px;
 }
-@font-face {
-  font-family: "MidnightSans";
-  src: url("https://cdn.shopify.com/s/files/1/0297/8132/7932/files/midnight-sans-rd-12-medium-trial.otf?v=1768200246")
-    format("opentype");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
+
+/* Track (background area) */
+::-webkit-scrollbar-track {
+  background: #fff;
+}
+
+/* Scroll thumb */
+::-webkit-scrollbar-thumb {
+  background: var(--primary-indigo);
+  border-radius: 20px;
+}
+
+/* Hover effect */
+::-webkit-scrollbar-thumb:hover {
+  background: indigo;
 }
 
 :root {
@@ -37,6 +42,23 @@
   --transition-smooth: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
+@font-face {
+  font-family: "RecklessCondensed";
+  src: url("https://cdn.shopify.com/s/files/1/0297/8132/7932/files/RecklessCondensedS-TRIAL-Book.woff?v=1768655865")
+    format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "MidnightSans";
+  src: url("https://cdn.shopify.com/s/files/1/0297/8132/7932/files/midnight-sans-rd-12-medium-trial.otf?v=1768200246")
+    format("opentype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
 *,
 *::before,
 *::after {
@@ -57,7 +79,7 @@ body {
   background-color: var(--bg-off-white);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
+  overflow-x: hidden !important;
 }
 img {
   display: block;
