@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DOM Task Manager</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="header-left">
+        <span class="logo-icon"><i class="ri-terminal-box-fill"></i></span>
+        <div class="header-titles">
+          <h1 class="app-title">DOM Task Manager</h1>
+          <p class="app-subtitle">Vanilla JS · DOM APIs · Event Propagation</p>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="counters">
+          <span class="counter">
+            <i class="ri-time-line pending-icon"></i>
+            <span class="counter-label">Pending:</span>
+            <strong id="pending-count">0</strong>
+          </span>
+          <span class="counter">
+            <i class="ri-checkbox-circle-line done-icon"></i>
+            <span class="counter-label">Done:</span>
+            <strong id="done-count">0</strong>
+          </span>
+        </div>
+        <button
+          class="theme-toggle"
+          id="theme-toggle"
+          aria-label="Toggle theme"
+        >
+          <i class="ri-moon-fill" id="theme-icon"></i>
+        </button>
+      </div>
+    </header>
+
+    <main class="app-main">
+      <section class="panel left-panel">
+        <div class="card">
+          <h2 class="card-title">
+            <i class="ri-add-circle-line"></i> New Task
+          </h2>
+          <div class="form-group">
+            <label for="task-title">Task Title</label>
+            <input
+              type="text"
+              id="task-title"
+              placeholder="What needs to be done?"
+              value="My first task"
+              autocomplete="off"
+            />
+          </div>
+          <div class="form-group">
+            <label for="task-category">Category</label>
+            <select id="task-category">
+              <option value="work">Work</option>
+              <option value="personal">Personal</option>
+              <option value="study">Study</option>
+              <option value="health">Health</option>
+              <option value="urgent">Urgent</option>
+            </select>
+          </div>
+          <button class="btn btn-primary" id="add-task-btn">
+            <i class="ri-add-line"></i> Add Task
+          </button>
+        </div>
+
+        <div class="card filter-card">
+          <div class="search-wrap">
+            <i class="ri-search-line"></i>
+            <input type="text" id="search-input" placeholder="Search tasks…" />
+          </div>
+          <div class="filter-row">
+            <select id="filter-category">
+              <option value="all">All Categories</option>
+              <option value="work">Work</option>
+              <option value="personal">Personal</option>
+              <option value="study">Study</option>
+              <option value="health">Health</option>
+              <option value="urgent">Urgent</option>
+            </select>
+            <select id="filter-status">
+              <option value="all">All Status</option>
+              <option value="pending">Pending</option>
+              <option value="completed">Completed</option>
+            </select>
+            <button class="btn btn-danger btn-sm" id="clear-all-btn">
+              <i class="ri-delete-bin-line"></i>
+              <span class="btn-label">Clear All</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="task-list" id="task-list">
+          <div class="empty-state" id="empty-state">
+            <i class="ri-inbox-2-line"></i>
+            <p>No tasks yet. Add one above!</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel right-panel">
+        <div class="card">
+          <h2 class="card-title">
+            <i class="ri-code-box-line"></i> Attributes vs Properties
+          </h2>
+          <p class="card-desc">
+            The Task Title input has <code>value="My first task"</code> in the
+            HTML. Type something — watch the <em>property</em> change while the
+            <em>attribute</em> stays frozen.
+          </p>
+          <div class="attr-demo">
+            <div class="attr-row">
+              <span class="attr-label">input.getAttribute("value")</span>
+              <span class="attr-value attr-static" id="attr-get"></span>
+            </div>
+            <div class="attr-row">
+              <span class="attr-label">input.value (live property)</span>
+              <span class="attr-value attr-live" id="attr-prop"></span>
+            </div>
+          </div>
+          <p class="attr-note">
+            Attributes reflect the <strong>initial HTML</strong>. Properties
+            reflect the <strong>live DOM state</strong>.
+          </p>
+        </div>
+
+        <div class="card">
+          <h2 class="card-title">
+            <i class="ri-git-branch-line"></i> Event Propagation
+          </h2>
+          <div class="prop-controls">
+            <button class="btn btn-sm btn-outline active" id="mode-bubble">
+              Bubbling
+            </button>
+            <button class="btn btn-sm btn-outline" id="mode-capture">
+              Capturing
+            </button>
+          </div>
+          <div class="prop-box gp-box" id="box-gp">
+            <span class="box-label">Grandparent</span>
+            <div class="prop-box p-box" id="box-p">
+              <span class="box-label">Parent</span>
+              <button class="prop-child-btn" id="box-c">
+                <i class="ri-cursor-line"></i> Click Me (Child)
+              </button>
+            </div>
+          </div>
+          <div class="prop-log" id="prop-log">
+            <span class="log-hint"
+              >Click the Child button to see propagation…</span
+            >
+          </div>
+        </div>
+
+        <div class="card">
+          <h2 class="card-title">
+            <i class="ri-flow-chart"></i> Browser Rendering Pipeline
+          </h2>
+          <div class="pipeline">
+            <div class="pipe-branches">
+              <div class="pipe-col">
+                <div class="pipe-node html-node">
+                  <i class="ri-html5-fill"></i>
+                  <div><strong>HTML Source</strong><span>Raw bytes</span></div>
+                </div>
+                <div class="pipe-arrow">↓</div>
+                <div class="pipe-node">
+                  <i class="ri-scissors-cut-line"></i>
+                  <div>
+                    <strong>Tokenization</strong><span>Bytes → Tokens</span>
+                  </div>
+                </div>
+                <div class="pipe-arrow">↓</div>
+                <div class="pipe-node">
+                  <i class="ri-node-tree"></i>
+                  <div>
+                    <strong>DOM Tree</strong><span>Tokens → Nodes</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="pipe-plus">+</div>
+
+              <div class="pipe-col">
+                <div class="pipe-node css-node">
+                  <i class="ri-css3-fill"></i>
+                  <div><strong>CSS Source</strong><span>Raw bytes</span></div>
+                </div>
+                <div class="pipe-arrow">↓</div>
+                <div class="pipe-node">
+                  <i class="ri-palette-line"></i>
+                  <div>
+                    <strong>CSSOM Tree</strong><span>Cascade → Tree</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="pipe-arrow pipe-merge-arrow">
+              ↓ &nbsp;combine&nbsp; ↓
+            </div>
+
+            <div class="pipe-node render-node">
+              <i class="ri-eye-line"></i>
+              <div>
+                <strong>Render Tree</strong
+                ><span>Visible nodes + computed styles</span>
+              </div>
+            </div>
+
+            <div class="pipe-arrow">↓</div>
+
+            <div class="pipe-row">
+              <div class="pipe-node final-node">
+                <i class="ri-layout-line"></i>
+                <div>
+                  <strong>Layout</strong><span>Size &amp; Position</span>
+                </div>
+              </div>
+              <div class="pipe-arrow-h">→</div>
+              <div class="pipe-node final-node">
+                <i class="ri-brush-2-line"></i>
+                <div><strong>Paint</strong><span>Pixels</span></div>
+              </div>
+              <div class="pipe-arrow-h">→</div>
+              <div class="pipe-node final-node">
+                <i class="ri-stack-line"></i>
+                <div><strong>Composite</strong><span>Layers</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div class="modal-overlay hidden" id="modal-overlay">
+      <div
+        class="modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-heading"
+      >
+        <h3 id="modal-heading"><i class="ri-edit-line"></i> Edit Task</h3>
+        <div class="form-group">
+          <label for="edit-title">Task Title</label>
+          <input type="text" id="edit-title" />
+        </div>
+        <div class="form-group">
+          <label for="edit-category">Category</label>
+          <select id="edit-category">
+            <option value="work">Work</option>
+            <option value="personal">Personal</option>
+            <option value="study">Study</option>
+            <option value="health">Health</option>
+            <option value="urgent">Urgent</option>
+          </select>
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-ghost" id="modal-cancel">Cancel</button>
+          <button class="btn btn-primary" id="modal-save">
+            <i class="ri-save-line"></i> Save Changes
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
