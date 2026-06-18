@@ -297,7 +297,7 @@ taskTitleInput.addEventListener("input", updateAttrDemo);
 themeToggle.addEventListener("click", function () {
   const html = document.documentElement;
   const current = html.getAttribute("data-theme");
-  const next = current === "dark" ? "light" : "dark";
+  const next = current === "light" ? "dark" : "light";
 
   html.setAttribute("data-theme", next);
 
