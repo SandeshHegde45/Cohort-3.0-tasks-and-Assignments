@@ -226,7 +226,7 @@ body.dark-theme .add-btn {
   font-weight: 500;
 }
 .btn-primary {
-  background: var(--accent-black);
+  background: var(--primary-blue-text);
   color: #fff;
   border: none;
   padding: 10px 20px;
