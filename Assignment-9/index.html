@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Daybase — Productivity Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script>
+      (function () {
+        let saved = localStorage.getItem("daybase_theme");
+        if (saved === "light")
+          document.documentElement.setAttribute("data-theme", "light");
+      })();
+    </script>
+  </head>
+  <body>
+    <div class="bg-layer" id="bgLayer"></div>
+    <div class="bg-grain"></div>
+
+    <div class="app" id="app">
+      <header class="topbar">
+        <div class="brand">
+          <span class="brand-mark">◍</span>
+          <span class="brand-name">Daybase</span>
+        </div>
+        <div class="topbar-widgets">
+          <div class="clock-widget" id="clockWidget">
+            <span class="clock-time" id="clockTime">--:--:--</span>
+            <span class="clock-date" id="clockDate">-- --- ----</span>
+          </div>
+          <div class="weather-widget" id="weatherWidget">
+            <span class="weather-icon" id="weatherIcon">◐</span>
+            <span class="weather-temp" id="weatherTemp">--°</span>
+            <span class="weather-loc" id="weatherLoc">Locating…</span>
+          </div>
+          <button
+            class="theme-toggle"
+            id="themeToggle"
+            aria-label="Toggle theme"
+            aria-pressed="false"
+          >
+            <span class="theme-toggle-track">
+              <span class="theme-toggle-thumb"></span>
+            </span>
+          </button>
+        </div>
+      </header>
+
+      <main class="dashboard" id="dashboardView">
+        <p class="eyebrow" id="heroEyebrow">Today's board</p>
+        <h1 class="dashboard-title" id="heroGreeting">
+          What are we tackling today?
+        </h1>
+        <p class="hero-sub" id="heroSub">Loading your day…</p>
+
+        <section class="tile-grid">
+          <button class="tile" data-target="todo" data-accent="accent">
+            <span class="tile-index">Tasks</span>
+            <span class="tile-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M4 6h9" />
+                <path d="M4 12h9" />
+                <path d="M4 18h6" />
+                <path d="M17 5l1.8 1.8L22 3.5" />
+              </svg>
+            </span>
+            <span class="tile-name">Todo List</span>
+            <span class="tile-sub" id="todoSummary">No tasks yet</span>
+          </button>
+
+          <button class="tile" data-target="planner" data-accent="amber">
+            <span class="tile-index">Schedule</span>
+            <span class="tile-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="3.5" y="4.5" width="17" height="16" rx="2.5" />
+                <path d="M3.5 9.5h17" />
+                <path d="M8 3v3" />
+                <path d="M16 3v3" />
+                <path d="M7.5 13.5h2M11 13.5h2M14.5 13.5h2M7.5 17h2M11 17h2" />
+              </svg>
+            </span>
+            <span class="tile-name">Daily Planner</span>
+            <span class="tile-sub" id="plannerSummary">Plan your hours</span>
+          </button>
+
+          <button class="tile" data-target="goals" data-accent="violet">
+            <span class="tile-index">Targets</span>
+            <span class="tile-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="12" cy="12" r="8.5" />
+                <circle cx="12" cy="12" r="4.5" />
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="0.8"
+                  fill="currentColor"
+                  stroke="none"
+                />
+              </svg>
+            </span>
+            <span class="tile-name">Daily Goals</span>
+            <span class="tile-sub" id="goalsSummary">0 of 0 completed</span>
+          </button>
+
+          <button class="tile" data-target="pomodoro" data-accent="coral">
+            <span class="tile-index">Focus</span>
+            <span class="tile-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="12" cy="13" r="8" />
+                <path d="M12 9v4l2.6 1.6" />
+                <path d="M9.5 2.5h5" />
+                <path d="M18.5 5.5l1.3-1.3" />
+              </svg>
+            </span>
+            <span class="tile-name">Pomodoro Timer</span>
+            <span class="tile-sub" id="pomodoroSummary">25:00 ready</span>
+          </button>
+
+          <button class="tile" data-target="quote" data-accent="sky">
+            <span class="tile-index">Motivation</span>
+            <span class="tile-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path
+                  d="M7 8.5c-2 0-3.2 1.6-3.2 3.5 0 2 1.3 3.5 3 3.5.3 1.8-.7 3-2.3 3.5"
+                />
+                <path
+                  d="M15.8 8.5c-2 0-3.2 1.6-3.2 3.5 0 2 1.3 3.5 3 3.5.3 1.8-.7 3-2.3 3.5"
+                />
+              </svg>
+            </span>
+            <span class="tile-name">Motivation Quote</span>
+            <span class="tile-sub">A little push</span>
+          </button>
+
+          <button class="tile" data-target="weather" data-accent="amber">
+            <span class="tile-index">Conditions</span>
+            <span class="tile-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="9.5" cy="9" r="3.6" />
+                <path
+                  d="M9.5 2.8v1.6M9.5 12.6v1.6M3.4 9h1.6M14 9h1.6M5.5 5l1.1 1.1M12.4 5l-1.1 1.1M5.5 13l1.1-1.1M12.4 13l-1.1-1.1"
+                />
+                <path
+                  d="M9 18.5a4 4 0 0 1 1-7.9c.4-1.6 1.9-2.8 3.6-2.8 2.1 0 3.8 1.7 3.9 3.8a3.4 3.4 0 0 1-.5 6.9H9Z"
+                />
+              </svg>
+            </span>
+            <span class="tile-name">Weather</span>
+            <span class="tile-sub">Full forecast</span>
+          </button>
+        </section>
+      </main>
+
+      <section class="feature-view" id="feature-todo" data-feature>
+        <div class="feature-header">
+          <button class="back-btn" data-back>← Back</button>
+          <h2>Todo List</h2>
+        </div>
+        <div class="feature-body">
+          <form class="todo-form" id="todoForm">
+            <input
+              type="text"
+              id="todoInput"
+              placeholder="Add a task…"
+              autocomplete="off"
+              maxlength="140"
+            />
+            <button type="submit">Add Task</button>
+          </form>
+          <ul class="todo-list" id="todoList"></ul>
+          <p class="empty-state" id="todoEmpty">
+            Nothing here yet. Add your first task above.
+          </p>
+        </div>
+      </section>
+
+      <section class="feature-view" id="feature-planner" data-feature>
+        <div class="feature-header">
+          <button class="back-btn" data-back>← Back</button>
+          <h2>Daily Planner</h2>
+        </div>
+        <div class="feature-body">
+          <div class="planner-list" id="plannerList"></div>
+        </div>
+      </section>
+
+      <section class="feature-view" id="feature-goals" data-feature>
+        <div class="feature-header">
+          <button class="back-btn" data-back>← Back</button>
+          <h2>Daily Goals</h2>
+        </div>
+        <div class="feature-body">
+          <form class="goal-form" id="goalForm">
+            <input
+              type="text"
+              id="goalInput"
+              placeholder="Set a goal for today…"
+              autocomplete="off"
+              maxlength="120"
+            />
+            <button type="submit">Add Goal</button>
+          </form>
+          <div class="goal-progress">
+            <div class="goal-progress-track">
+              <div class="goal-progress-fill" id="goalProgressFill"></div>
+            </div>
+            <span id="goalProgressText">0 of 0 completed</span>
+          </div>
+          <ul class="goal-list" id="goalList"></ul>
+          <p class="empty-state" id="goalEmpty">
+            No goals yet. What matters most today?
+          </p>
+        </div>
+      </section>
+
+      <section class="feature-view" id="feature-pomodoro" data-feature>
+        <div class="feature-header">
+          <button class="back-btn" data-back>← Back</button>
+          <h2>Pomodoro Timer</h2>
+        </div>
+        <div class="feature-body pomodoro-body">
+          <span class="session-label" id="sessionLabel">Work Session</span>
+          <div class="timer-ring-wrap">
+            <svg class="timer-ring" viewBox="0 0 200 200">
+              <circle class="timer-ring-track" cx="100" cy="100" r="90" />
+              <circle
+                class="timer-ring-progress"
+                id="timerRingProgress"
+                cx="100"
+                cy="100"
+                r="90"
+              />
+            </svg>
+            <div class="timer-display" id="timerDisplay">25:00</div>
+          </div>
+          <div class="timer-controls">
+            <button id="timerStart">Start</button>
+            <button id="timerPause">Pause</button>
+            <button id="timerReset">Reset</button>
+          </div>
+          <div class="session-switch">
+            <button
+              class="session-btn active"
+              data-session="work"
+              data-minutes="25"
+            >
+              Work · 25m
+            </button>
+            <button class="session-btn" data-session="short" data-minutes="5">
+              Short Break · 5m
+            </button>
+            <button class="session-btn" data-session="long" data-minutes="15">
+              Long Break · 15m
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="feature-view" id="feature-quote" data-feature>
+        <div class="feature-header">
+          <button class="back-btn" data-back>← Back</button>
+          <h2>Motivation Quote</h2>
+        </div>
+        <div class="feature-body quote-body">
+          <blockquote class="quote-text" id="quoteText">
+            Loading a quote…
+          </blockquote>
+          <cite class="quote-author" id="quoteAuthor"></cite>
+          <button id="newQuoteBtn">New Quote</button>
+        </div>
+      </section>
+
+      <section class="feature-view" id="feature-weather" data-feature>
+        <div class="feature-header">
+          <button class="back-btn" data-back>← Back</button>
+          <h2>Weather</h2>
+        </div>
+        <div class="feature-body weather-body">
+          <div class="weather-card" id="weatherCard">
+            <span class="weather-card-icon" id="weatherCardIcon">◐</span>
+            <span class="weather-card-temp" id="weatherCardTemp">--°</span>
+            <span class="weather-card-cond" id="weatherCardCond"
+              >Fetching conditions…</span
+            >
+            <span class="weather-card-loc" id="weatherCardLoc">—</span>
+            <div class="weather-details">
+              <div class="weather-detail">
+                <span class="weather-detail-label">Precipitation</span>
+                <span class="weather-detail-value" id="weatherPrecip"
+                  >-- mm</span
+                >
+              </div>
+              <div class="weather-detail">
+                <span class="weather-detail-label">Humidity</span>
+                <span class="weather-detail-value" id="weatherHumidity"
+                  >--%</span
+                >
+              </div>
+              <div class="weather-detail">
+                <span class="weather-detail-label">Wind</span>
+                <span class="weather-detail-value" id="weatherWind"
+                  >-- km/h</span
+                >
+              </div>
+              <div class="weather-detail">
+                <span class="weather-detail-label">Feels like</span>
+                <span class="weather-detail-value" id="weatherFeels">--°</span>
+              </div>
+            </div>
+          </div>
+          <button id="refreshWeatherBtn">Refresh</button>
+        </div>
+      </section>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
