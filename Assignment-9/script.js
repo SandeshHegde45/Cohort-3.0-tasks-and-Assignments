@@ -132,6 +132,7 @@ function updateTodoSummary() {
   } else {
     el.textContent = pending + " pending";
   }
+  updateHeroGreeting();
 }
 
 function initTodo() {
@@ -309,6 +310,7 @@ function updateGoalProgress() {
   const label = done + " of " + total + " completed";
   document.getElementById("goalProgressText").textContent = label;
   document.getElementById("goalsSummary").textContent = label;
+  updateHeroGreeting();
 }
 
 function initGoals() {
@@ -358,6 +360,8 @@ const SESSION_LABELS = {
   short: "Short Break",
   long: "Long Break",
 };
+const SESSION_COLORS = { work: "--accent", short: "--amber", long: "--violet" };
+const RING_CIRCUMFERENCE = 565.5;
 let currentSession = "work";
 let remainingSeconds = SESSION_DURATIONS.work;
 let pomodoroInterval = null;
@@ -375,6 +379,12 @@ function updateTimerDisplay() {
   document.getElementById("timerDisplay").textContent = display;
   document.getElementById("pomodoroSummary").textContent =
     display + (pomodoroInterval ? " running" : " ready");
+
+  const total = SESSION_DURATIONS[currentSession];
+  const elapsedRatio = total === 0 ? 0 : (total - remainingSeconds) / total;
+  const ring = document.getElementById("timerRingProgress");
+  ring.style.stroke = "var(" + SESSION_COLORS[currentSession] + ")";
+  ring.style.strokeDashoffset = String(RING_CIRCUMFERENCE * elapsedRatio);
 }
 
 function playChime() {
@@ -423,8 +433,9 @@ function resetTimer() {
   window.clearInterval(pomodoroInterval);
   pomodoroInterval = null;
   remainingSeconds = SESSION_DURATIONS[currentSession];
-  document.getElementById("sessionLabel").textContent =
-    SESSION_LABELS[currentSession];
+  const label = document.getElementById("sessionLabel");
+  label.textContent = SESSION_LABELS[currentSession];
+  label.style.color = "var(" + SESSION_COLORS[currentSession] + ")";
   updateTimerDisplay();
 }
 
@@ -540,6 +551,8 @@ function renderWeather(data, locationName) {
     Math.round(current.wind_speed_10m) + " km/h";
   document.getElementById("weatherFeels").textContent =
     Math.round(current.apparent_temperature) + "°";
+  document.getElementById("weatherPrecip").textContent =
+    current.precipitation.toFixed(1) + " mm";
 }
 
 function showWeatherError() {
@@ -554,7 +567,7 @@ function fetchWeather(latitude, longitude, locationName) {
     latitude +
     "&longitude=" +
     longitude +
-    "&current=temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m,weather_code" +
+    "&current=temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m,weather_code,precipitation" +
     "&timezone=auto";
 
   document.getElementById("weatherCardCond").textContent =
@@ -663,11 +676,73 @@ function currentTimeCategory(hour) {
   return "night";
 }
 
+function updateHeroGreeting() {
+  const now = new Date();
+  const category = currentTimeCategory(now.getHours());
+  const greetings = {
+    morning: "Good morning",
+    afternoon: "Good afternoon",
+    evening: "Good evening",
+    night: "Good night",
+  };
+
+  const days = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const dateLabel =
+    days[now.getDay()] + ", " + now.getDate() + " " + months[now.getMonth()];
+
+  document.getElementById("heroEyebrow").textContent = dateLabel;
+  document.getElementById("heroGreeting").textContent =
+    greetings[category] + " — what are we tackling today?";
+
+  const pendingTodos = todos.filter(function (t) {
+    return !t.completed;
+  }).length;
+  const pendingGoals = goals.filter(function (g) {
+    return !g.completed;
+  }).length;
+  let subtitle;
+  if (pendingTodos === 0 && pendingGoals === 0) {
+    subtitle =
+      "Nothing urgent on the board right now — a good moment to plan ahead.";
+  } else {
+    const parts = [];
+    if (pendingTodos > 0)
+      parts.push(pendingTodos + (pendingTodos === 1 ? " task" : " tasks"));
+    if (pendingGoals > 0)
+      parts.push(pendingGoals + (pendingGoals === 1 ? " goal" : " goals"));
+    subtitle = "You have " + parts.join(" and ") + " still open.";
+  }
+  document.getElementById("heroSub").textContent = subtitle;
+}
+
 function applyDynamicBackground() {
   const hour = new Date().getHours();
   const category = currentTimeCategory(hour);
   const layer = document.getElementById("bgLayer");
-  layer.style.background = BACKGROUND_GRADIENTS[category];
+  layer.style.backgroundImage = BACKGROUND_GRADIENTS[category];
+  updateHeroGreeting();
 }
 
 function initDynamicBackground() {
