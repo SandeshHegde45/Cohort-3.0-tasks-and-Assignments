@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
-import { User, Mail, Lock, ArrowRight, Zap, Check, X } from "lucide-react";
+import { Eye, EyeOff, Zap, ArrowRight, Mail, Lock, User, Check, X } from "lucide-react";
+import toast from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
 
 const passwordRules = [
@@ -10,8 +12,8 @@ const passwordRules = [
   { key: "symbol", label: "At least one symbol", test: (value) => /[^A-Za-z0-9]/.test(value) },
 ];
 
-const strengthLabels = ["Very weak", "Weak", "Fair", "Good", "Strong"];
-const strengthColors = ["bg-rose-500", "bg-rose-500", "bg-amber-500", "bg-lime-500", "bg-lime-500"];
+const strengthLabels = ["", "Weak", "Fair", "Good", "Strong"];
+const strengthColors = ["", "bg-red-500", "bg-amber-400", "bg-volt", "bg-volt"];
 
 function getPasswordScore(password) {
   if (!password) {
@@ -22,186 +24,171 @@ function getPasswordScore(password) {
 }
 
 export default function Register() {
-  const { register, handleSubmit, watch, formState, setError } = useForm();
+  const { register, handleSubmit, watch } = useForm();
   const { registerUser } = useAuth();
   const navigate = useNavigate();
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [authError, setAuthError] = useState("");
 
   const passwordValue = watch("password", "");
   const { score, passedRules } = getPasswordScore(passwordValue);
 
-  function onSubmit(formValues) {
-    if (formValues.password !== formValues.confirmPassword) {
-      setError("confirmPassword", { message: "Passwords don't match." });
+  async function onSubmit(formValues) {
+    setAuthError("");
+    const { name, email, password, confirmPassword } = formValues;
+    if (!name || !email || !password || !confirmPassword) {
+      toast.error("Fill all fields");
       return;
     }
     if (score < 3) {
-      setError("password", { message: "Please choose a stronger password." });
+      toast.error("Please choose a stronger password");
       return;
     }
+    if (password !== confirmPassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
+    setIsSubmitting(true);
+    await new Promise((resolve) => setTimeout(resolve, 700));
     try {
-      registerUser(formValues.name, formValues.email, formValues.password);
+      registerUser(name.trim(), email.trim().toLowerCase(), password);
       navigate("/login", { state: { justRegistered: true } });
     } catch (error) {
-      setError("root", { message: error.message });
+      setAuthError(error.message);
     }
+    setIsSubmitting(false);
   }
 
   return (
-    <div className="grid min-h-screen md:grid-cols-2">
-      <div className="hidden flex-col justify-center gap-10 border-r border-white/5 bg-ink-950 px-16 md:flex">
-        <Link to="/login" className="flex items-center gap-2">
-          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-lime-500 text-ink-950">
-            <Zap size={18} fill="currentColor" />
-          </span>
-          <span className="font-display text-xl font-bold">
-            Sky<span className="text-lime-500">Mart</span>
-          </span>
-        </Link>
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-lime-400">
-            Join SkyMart
-          </p>
-          <h1 className="mt-3 font-display text-5xl font-bold leading-tight">
-            Create your
-            <br />
-            <span className="text-lime-500">free account.</span>
-          </h1>
-          <p className="mt-4 max-w-sm text-gray-400">
-            Save items to your cart, track orders, and get personalized
-            picks every time you shop.
-          </p>
-        </div>
-      </div>
-
-      <div className="flex items-center justify-center px-6 py-16">
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="w-full max-w-sm rounded-3xl border border-white/10 bg-ink-900 p-8"
-        >
-          <div className="mb-6 flex items-center gap-2 md:hidden">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-lime-500 text-ink-950">
-              <Zap size={16} fill="currentColor" />
-            </span>
-            <span className="font-display text-lg font-bold">
-              Sky<span className="text-lime-500">Mart</span>
-            </span>
+    <div className="min-h-screen bg-[#0d0d0d] flex items-center justify-center p-6">
+      <div className="w-full max-w-md animate-scale-in">
+        <div className="flex items-center gap-2 mb-8 justify-center">
+          <div className="w-9 h-9 bg-volt rounded-xl flex items-center justify-center">
+            <Zap size={16} className="text-ink fill-ink" />
           </div>
+          <span className="font-heading font-bold text-xl">
+            Sky<span className="text-volt">Mart</span>
+          </span>
+        </div>
 
-          <h2 className="font-display text-2xl font-bold">Create account</h2>
-          <p className="mt-1 text-sm text-gray-500">
-            Just a few details to get you shopping
-          </p>
+        <div className="auth-card">
+          <h2 className="font-heading font-bold text-2xl mb-1">Create account</h2>
+          <p className="text-white/40 text-sm font-body mb-8">Join SkyMart and start shopping</p>
 
-          {formState.errors.root && (
-            <p className="mt-4 rounded-lg border border-rose-500/30 bg-rose-500/10 px-3 py-2 text-sm text-rose-300">
-              {formState.errors.root.message}
-            </p>
-          )}
-
-          <label className="mt-6 flex items-center gap-2 rounded-xl bg-[#E8F0FE] px-4 py-3 text-ink-950">
-            <User size={16} className="text-gray-400" />
-            <input
-              type="text"
-              placeholder="Full name"
-              className="w-full bg-transparent text-sm focus:outline-none"
-              {...register("name", { required: true })}
-            />
-          </label>
-          {formState.errors.name && (
-            <p className="mt-1 text-xs text-rose-400">Name is required.</p>
-          )}
-
-          <label className="mt-3 flex items-center gap-2 rounded-xl bg-[#E8F0FE] px-4 py-3 text-ink-950">
-            <Mail size={16} className="text-gray-400" />
-            <input
-              type="email"
-              placeholder="you@example.com"
-              className="w-full bg-transparent text-sm focus:outline-none"
-              {...register("email", { required: true })}
-            />
-          </label>
-          {formState.errors.email && (
-            <p className="mt-1 text-xs text-rose-400">Email is required.</p>
-          )}
-
-          <label className="mt-3 flex items-center gap-2 rounded-xl bg-[#E8F0FE] px-4 py-3 text-ink-950">
-            <Lock size={16} className="text-gray-400" />
-            <input
-              type="password"
-              placeholder="Create password"
-              className="w-full bg-transparent text-sm focus:outline-none"
-              {...register("password", { required: true, minLength: 4 })}
-            />
-          </label>
-          {formState.errors.password && (
-            <p className="mt-1 text-xs text-rose-400">{formState.errors.password.message || "Password is required."}</p>
-          )}
-
-          {passwordValue && (
-            <div className="mt-2 space-y-2 rounded-xl border border-white/10 bg-ink-800 p-3">
-              <div className="flex items-center gap-1.5">
-                {[0, 1, 2, 3].map((barIndex) => (
-                  <span
-                    key={barIndex}
-                    className={`h-1.5 flex-1 rounded-full transition-colors ${
-                      barIndex < score ? strengthColors[score] : "bg-white/10"
-                    }`}
-                  />
-                ))}
-              </div>
-              <p
-                className={`text-xs font-semibold ${
-                  score <= 1 ? "text-rose-400" : score === 2 ? "text-amber-400" : "text-lime-400"
-                }`}
-              >
-                {strengthLabels[score]}
-              </p>
-              <ul className="grid grid-cols-2 gap-x-3 gap-y-1">
-                {passwordRules.map((rule) => {
-                  const isRulePassed = passedRules.includes(rule.key);
-                  return (
-                    <li
-                      key={rule.key}
-                      className={`flex items-center gap-1.5 text-[11px] ${
-                        isRulePassed ? "text-lime-400" : "text-gray-500"
-                      }`}
-                    >
-                      {isRulePassed ? <Check size={12} /> : <X size={12} />}
-                      {rule.label}
-                    </li>
-                  );
-                })}
-              </ul>
+          {authError && (
+            <div className="bg-red-500/10 border border-red-500/30 text-red-400 text-sm px-4 py-3 rounded-xl mb-6">
+              {authError}
             </div>
           )}
 
-          <label className="mt-3 flex items-center gap-2 rounded-xl bg-[#E8F0FE] px-4 py-3 text-ink-950">
-            <Lock size={16} className="text-gray-400" />
-            <input
-              type="password"
-              placeholder="Confirm password"
-              className="w-full bg-transparent text-sm focus:outline-none"
-              {...register("confirmPassword", { required: true })}
-            />
-          </label>
-          {formState.errors.confirmPassword && (
-            <p className="mt-1 text-xs text-rose-400">{formState.errors.confirmPassword.message || "Please confirm your password."}</p>
-          )}
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <div className="relative">
+              <User size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/25" />
+              <input type="text" placeholder="Full name" className="field pl-10" {...register("name")} />
+            </div>
 
-          <button
-            type="submit"
-            className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-lime-500 py-3 text-sm font-semibold text-ink-950 hover:bg-lime-400"
-          >
-            Create account <ArrowRight size={16} />
-          </button>
+            <div className="relative">
+              <Mail size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/25" />
+              <input type="email" placeholder="Email address" className="field pl-10" {...register("email")} />
+            </div>
 
-          <p className="mt-5 text-center text-sm text-gray-500">
+            <div>
+              <div className="relative">
+                <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/25" />
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password (min 8 chars)"
+                  className="field pl-10 pr-10"
+                  {...register("password")}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/25 hover:text-white/60 transition-colors"
+                >
+                  {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
+                </button>
+              </div>
+
+              {passwordValue && (
+                <div className="mt-2 bg-white/4 border border-white/8 rounded-xl p-3">
+                  <div className="flex gap-1.5 items-center">
+                    {[1, 2, 3, 4].map((barIndex) => (
+                      <div
+                        key={barIndex}
+                        className={`h-1 flex-1 rounded-full transition-all duration-300 ${
+                          barIndex <= score ? strengthColors[score] : "bg-white/10"
+                        }`}
+                      />
+                    ))}
+                    <span
+                      className={`text-xs font-body ml-1 ${
+                        score >= 3 ? "text-volt" : score === 2 ? "text-amber-400" : "text-red-400"
+                      }`}
+                    >
+                      {strengthLabels[score]}
+                    </span>
+                  </div>
+                  <ul className="grid grid-cols-2 gap-x-3 gap-y-1 mt-2">
+                    {passwordRules.map((rule) => {
+                      const isRulePassed = passedRules.includes(rule.key);
+                      return (
+                        <li
+                          key={rule.key}
+                          className={`flex items-center gap-1.5 text-[11px] font-body ${
+                            isRulePassed ? "text-volt" : "text-white/25"
+                          }`}
+                        >
+                          {isRulePassed ? <Check size={12} /> : <X size={12} />}
+                          {rule.label}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              )}
+            </div>
+
+            <div className="relative">
+              <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/25" />
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Confirm password"
+                className="field pl-10"
+                {...register("confirmPassword")}
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="btn-volt w-full flex items-center justify-center gap-2 py-3.5 mt-2 text-base font-heading font-bold"
+            >
+              {isSubmitting ? (
+                <span className="flex items-center gap-2">
+                  <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                  </svg>
+                  Creating account...
+                </span>
+              ) : (
+                <>
+                  Create Account <ArrowRight size={18} />
+                </>
+              )}
+            </button>
+          </form>
+
+          <p className="text-center text-white/30 text-sm font-body mt-6">
             Already have an account?{" "}
-            <Link to="/login" className="font-semibold text-lime-400 hover:text-lime-300">
+            <Link to="/login" className="text-volt hover:text-volt-light font-semibold transition-colors">
               Sign in
             </Link>
           </p>
-        </form>
+        </div>
       </div>
     </div>
   );
