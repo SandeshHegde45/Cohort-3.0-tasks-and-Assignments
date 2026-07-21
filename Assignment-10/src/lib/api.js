@@ -8,29 +8,11 @@ const excludedCategories = ["beauty"];
 
 const categoryGroups = {
   Electronics: ["smartphones", "laptops", "tablets", "mobile-accessories"],
-  Clothing: [
-    "mens-shirts",
-    "mens-shoes",
-    "tops",
-    "womens-dresses",
-    "womens-shoes",
-  ],
+  Clothing: ["mens-shirts", "mens-shoes", "tops", "womens-dresses", "womens-shoes"],
   Furniture: ["furniture"],
-  Home: [
-    "home-decoration",
-    "kitchen-accessories",
-    "groceries",
-    "skin-care",
-    "fragrances",
-  ],
+  Home: ["home-decoration", "kitchen-accessories", "groceries", "skin-care", "fragrances"],
   Sports: ["sports-accessories", "motorcycle", "vehicle"],
-  Accessories: [
-    "womens-bags",
-    "womens-jewellery",
-    "womens-watches",
-    "mens-watches",
-    "sunglasses",
-  ],
+  Accessories: ["womens-bags", "womens-jewellery", "womens-watches", "mens-watches", "sunglasses"],
 };
 
 export function getCategoryGroup(apiCategory) {
@@ -78,7 +60,7 @@ export async function getAllProducts() {
       .then((response) =>
         response.data.products
           .filter((product) => !excludedCategories.includes(product.category))
-          .map(formatProduct),
+          .map(formatProduct)
       );
   }
   return cachedProductsPromise;

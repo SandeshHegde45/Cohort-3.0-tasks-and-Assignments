@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router";
 import { Zap, ShoppingCart, LogOut, Menu, X } from "lucide-react";
+import toast from "react-hot-toast";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 
@@ -14,84 +15,87 @@ export default function Navbar() {
   const { totalItemCount, toggleCart } = useCart();
   const { currentUser, logoutUser } = useAuth();
   const navigate = useNavigate();
+  const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  useEffect(() => {
+    function handleScroll() {
+      setIsScrolled(window.scrollY > 20);
+    }
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   function handleLogout() {
     logoutUser();
+    toast.success("Logged out. See you soon! 👋");
     navigate("/login");
   }
 
   return (
-    <header className="sticky top-0 z-30 border-b border-white/5 bg-ink-950/80 backdrop-blur">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6">
-        <NavLink to="/" className="flex items-center gap-2">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-lime-500 text-ink-950">
-            <Zap size={18} fill="currentColor" />
-          </span>
-          <span className="font-display text-lg font-bold">
-            Sky<span className="text-lime-500">Mart</span>
+    <header
+      className={`sticky top-0 z-30 transition-all duration-300 ${
+        isScrolled ? "bg-[#0d0d0d]/90 backdrop-blur-xl border-b border-white/8" : "bg-transparent"
+      }`}
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-6">
+        <NavLink to="/" className="flex items-center gap-2 shrink-0">
+          <div className="w-8 h-8 bg-volt rounded-xl flex items-center justify-center">
+            <Zap size={15} className="text-ink fill-ink" />
+          </div>
+          <span className="font-heading font-bold text-lg">
+            Sky<span className="text-volt">Mart</span>
           </span>
         </NavLink>
 
-        <nav className="hidden gap-8 md:flex">
+        <nav className="hidden md:flex items-center gap-6">
           {navLinks.map((link) => (
             <NavLink
               key={link.path}
               to={link.path}
               end={link.path === "/"}
-              className={({ isActive }) =>
-                `text-sm font-medium transition-colors ${
-                  isActive ? "text-lime-500" : "text-gray-400 hover:text-white"
-                }`
-              }
+              className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}
             >
               {link.label}
             </NavLink>
           ))}
         </nav>
 
-        <div className="flex items-center gap-2 sm:gap-3">
-          {currentUser ? (
-            <>
-              <span className="hidden items-center gap-2 rounded-full border border-white/10 bg-ink-800 py-1 pl-1 pr-3 text-sm sm:flex">
-                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-lime-500 text-xs font-bold text-ink-950">
-                  {currentUser.avatar}
-                </span>
+        <div className="flex items-center gap-2 shrink-0">
+          {currentUser && (
+            <div className="hidden sm:flex items-center gap-2 bg-white/5 border border-white/10 px-3 py-1.5 rounded-xl">
+              <div className="w-6 h-6 bg-volt rounded-lg flex items-center justify-center text-ink text-xs font-bold">
+                {currentUser.avatar}
+              </div>
+              <span className="text-sm text-white/70 font-body max-w-[100px] truncate">
                 {currentUser.name}
               </span>
-              <button
-                onClick={toggleCart}
-                className="relative rounded-lg border border-white/10 bg-ink-800 p-2 text-gray-300 hover:text-white"
-                aria-label="Open cart"
-              >
-                <ShoppingCart size={18} />
-                {totalItemCount > 0 && (
-                  <span className="absolute -right-1.5 -top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-lime-500 text-[10px] font-bold text-ink-950">
-                    {totalItemCount}
-                  </span>
-                )}
-              </button>
-              <button
-                onClick={handleLogout}
-                className="hidden rounded-lg border border-white/10 bg-ink-800 p-2 text-gray-300 hover:text-white sm:block"
-                title="Log out"
-              >
-                <LogOut size={18} />
-              </button>
-            </>
-          ) : (
-            <NavLink
-              to="/login"
-              className="rounded-lg bg-lime-500 px-4 py-2 text-sm font-semibold text-ink-950 hover:bg-lime-400"
-            >
-              Sign in
-            </NavLink>
+            </div>
           )}
 
           <button
+            onClick={toggleCart}
+            className="relative p-2.5 bg-white/8 hover:bg-white/12 border border-white/10 rounded-xl transition-all"
+          >
+            <ShoppingCart size={18} />
+            {totalItemCount > 0 && (
+              <span className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-volt text-ink text-[10px] font-bold rounded-full flex items-center justify-center">
+                {totalItemCount > 9 ? "9+" : totalItemCount}
+              </span>
+            )}
+          </button>
+
+          <button
+            onClick={handleLogout}
+            title="Logout"
+            className="p-2.5 bg-white/8 hover:bg-red-500/20 hover:border-red-500/30 border border-white/10 rounded-xl transition-all text-white/60 hover:text-red-400"
+          >
+            <LogOut size={16} />
+          </button>
+
+          <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="rounded-lg border border-white/10 bg-ink-800 p-2 text-gray-300 hover:text-white md:hidden"
-            aria-label="Toggle menu"
+            className="md:hidden p-2.5 bg-white/8 border border-white/10 rounded-xl"
           >
             {isMenuOpen ? <X size={18} /> : <Menu size={18} />}
           </button>
@@ -99,35 +103,21 @@ export default function Navbar() {
       </div>
 
       {isMenuOpen && (
-        <div className="border-t border-white/5 bg-ink-950 px-4 py-4 md:hidden">
-          <nav className="flex flex-col gap-3">
-            {navLinks.map((link) => (
-              <NavLink
-                key={link.path}
-                to={link.path}
-                end={link.path === "/"}
-                onClick={() => setIsMenuOpen(false)}
-                className={({ isActive }) =>
-                  `text-sm font-medium ${
-                    isActive ? "text-lime-500" : "text-gray-400 hover:text-white"
-                  }`
-                }
-              >
-                {link.label}
-              </NavLink>
-            ))}
-            {currentUser && (
-              <button
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  handleLogout();
-                }}
-                className="flex items-center gap-2 text-left text-sm font-medium text-gray-400 hover:text-white"
-              >
-                <LogOut size={16} /> Log out
-              </button>
-            )}
-          </nav>
+        <div className="md:hidden border-t border-white/8 bg-[#111] px-4 py-4 flex flex-col gap-3 animate-fade-in">
+          {navLinks.map((link) => (
+            <NavLink
+              key={link.path}
+              to={link.path}
+              end={link.path === "/"}
+              onClick={() => setIsMenuOpen(false)}
+              className={({ isActive }) => `nav-link text-base py-2 ${isActive ? "active" : ""}`}
+            >
+              {link.label}
+            </NavLink>
+          ))}
+          <button onClick={handleLogout} className="flex items-center gap-2 text-red-400 text-sm mt-2">
+            <LogOut size={14} /> Logout
+          </button>
         </div>
       )}
     </header>

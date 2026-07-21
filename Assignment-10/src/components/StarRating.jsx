@@ -1,24 +1,18 @@
 import { Star } from "lucide-react";
 
-export default function StarRating({ rating, size = 14, emptyColor = "text-gray-300" }) {
+export default function StarRating({ rating, size = 14 }) {
   const starIndexes = [0, 1, 2, 3, 4];
 
   return (
-    <div className="flex">
+    <div className="flex items-center">
       {starIndexes.map((starIndex) => {
-        const fillAmount = Math.min(Math.max(rating - starIndex, 0), 1);
-        const fillPercent = Math.round(fillAmount * 100);
-
+        const isFilled = starIndex < Math.round(rating || 0);
         return (
-          <span key={starIndex} className="relative" style={{ width: size, height: size }}>
-            <Star size={size} className={`absolute inset-0 ${emptyColor}`} />
-            <span
-              className="absolute inset-0 overflow-hidden"
-              style={{ width: `${fillPercent}%` }}
-            >
-              <Star size={size} fill="currentColor" className="text-amber-400" />
-            </span>
-          </span>
+          <Star
+            key={starIndex}
+            size={size}
+            className={isFilled ? "text-amber-400 fill-amber-400" : "text-white/15 fill-white/15"}
+          />
         );
       })}
     </div>

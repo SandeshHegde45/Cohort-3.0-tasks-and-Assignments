@@ -2,7 +2,6 @@ import { Routes, Route, Navigate, useLocation } from "react-router";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import CartDrawer from "./components/CartDrawer";
-import OrderPlacedToast from "./components/OrderPlacedToast";
 import Home from "./pages/Home";
 import Products from "./pages/Products";
 import ProductDetail from "./pages/ProductDetail";
@@ -90,7 +89,6 @@ export default function App() {
       </main>
       {!isAuthPage && <Footer />}
       <CartDrawer />
-      <OrderPlacedToast />
     </div>
   );
 }

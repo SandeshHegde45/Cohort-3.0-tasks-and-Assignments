@@ -12,11 +12,14 @@ export function CartProvider({ children }) {
     return [];
   });
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [isOrderPlaced, setIsOrderPlaced] = useState(false);
 
   useEffect(() => {
     localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
   }, [cartItems]);
+
+  function isInCart(productId) {
+    return cartItems.some((item) => item.id === productId);
+  }
 
   function addToCart(product) {
     const existingItem = cartItems.find((item) => item.id === product.id);
@@ -31,7 +34,6 @@ export function CartProvider({ children }) {
     } else {
       setCartItems([...cartItems, { ...product, quantity: 1 }]);
     }
-    setIsCartOpen(true);
   }
 
   function removeFromCart(productId) {
@@ -69,16 +71,6 @@ export function CartProvider({ children }) {
     setIsCartOpen(!isCartOpen);
   }
 
-  function placeOrder() {
-    clearCart();
-    closeCart();
-    setIsOrderPlaced(true);
-  }
-
-  function dismissOrderPlaced() {
-    setIsOrderPlaced(false);
-  }
-
   let totalItemCount = 0;
   let totalPrice = 0;
   cartItems.forEach((item) => {
@@ -88,6 +80,7 @@ export function CartProvider({ children }) {
 
   const value = {
     cartItems,
+    isInCart,
     addToCart,
     removeFromCart,
     updateQuantity,
@@ -98,9 +91,6 @@ export function CartProvider({ children }) {
     openCart,
     closeCart,
     toggleCart,
-    isOrderPlaced,
-    placeOrder,
-    dismissOrderPlaced,
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
